@@ -17,6 +17,8 @@ const JsonViewer = ({ jsonString }) => {
       collapsed={false}
       enableClipboard={true}
       indentWidth={2}
+      displayDataTypes={false}
+      displayObjectSize={false}
     />
   );
 };

@@ -20,7 +20,7 @@ function App() {
 
   const handleButtonClick = () => {
     const equipmentFilter = convertToUpdatedObj(JSON.parse(inputText));
-    const sqlSentence = `UPDATE tenant_symphony.network_groups SET equipment_filter = ${JSON.stringify(equipmentFilter)}, progress = 'PENDING', status = 1 WHERE id = ${id || 'XXXX'}`;
+    const sqlSentence = `UPDATE tenant_symphony.network_groups SET equipment_filter = '${JSON.stringify(equipmentFilter)}', progress = 'PENDING', status = 1 WHERE id = ${id || 'XXXX'}`;
     setJsonOutput(JSON.stringify(equipmentFilter))
     setSqlOutput(sqlSentence)
   }
