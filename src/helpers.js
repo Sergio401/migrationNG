@@ -574,4 +574,7 @@ export const convertToUpdatedObj = (obj) => {
   return null;
 };
 
-
+export const convertToSql = (id, equipmentFilter) => {
+    const sqlSentence = `UPDATE tenant_symphony.network_groups SET equipment_filter = '${JSON.stringify(equipmentFilter)}', progress = 'PENDING', status = 1 WHERE id = ${id || 'XXXX'}`;
+    return sqlSentence
+}   

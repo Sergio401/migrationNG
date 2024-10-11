@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { convertToUpdatedObj } from './helpers'
+import { convertToUpdatedObj, convertToSql } from './helpers'
 import JsonViewer from './JsonViewer'
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
 
   const handleButtonClick = () => {
     const equipmentFilter = convertToUpdatedObj(JSON.parse(inputText));
-    const sqlSentence = `UPDATE tenant_symphony.network_groups SET equipment_filter = '${JSON.stringify(equipmentFilter)}', progress = 'PENDING', status = 1 WHERE id = ${id || 'XXXX'}`;
+    const sqlSentence = convertToSql(id, equipmentFilter)
     setJsonOutput(JSON.stringify(equipmentFilter))
     setSqlOutput(sqlSentence)
   }
@@ -39,7 +39,7 @@ function App() {
           <textarea
             value={inputText}
             onChange={handleInputChange}
-            placeholder="Ingrese texto aquí"
+            placeholder="Enter Raw Filter here"
           />
         </div>
         <button onClick={handleButtonClick}>Process</button>
