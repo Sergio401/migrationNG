@@ -1,7 +1,7 @@
 import { createWriteStream } from 'fs';
 import csvParser from 'csv-parser';
 import { writeToStream } from 'fast-csv';
-import { convertToUpdatedObj } from './helpers.js';
+import { convertToUpdatedObj, convertToSql } from './helpers.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const inputFilePath = path.join(__dirname, 'ngComplete.csv');
-const outputFilePath = path.join(__dirname, 'ngComplete_modified.csv');
+const outputFilePath = path.join(__dirname, 'ngComplete_with_sql.csv');
 
 const records = [];
 
@@ -18,15 +18,17 @@ const readCSV = async () => {
   return new Promise((resolve, reject) => {
     const readStream = fs.createReadStream(inputFilePath);
     readStream
-      .pipe(csvParser({ separator: ';' })) // Cambiar el separador a punto y coma
+      .pipe(csvParser({ separator: ';' }))
       .on('data', (row) => {
         const rawFilterColumn = row['raw_filter'];
         try {
           const updatedObj = convertToUpdatedObj(JSON.parse(rawFilterColumn));
+          const updatedSql = convertToSql(row['id'], updatedObj);
           row['equipment_filter_updated'] = JSON.stringify(updatedObj);
+          row['sql_sentence'] = updatedSql;
         } catch (error) {
-          // Si hay un error, establecer el registro en cero
           row['equipment_filter_updated'] = '0';
+          row['sql_sentence'] = '0';
         }      
         records.push(row);
       })
