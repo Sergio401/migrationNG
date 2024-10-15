@@ -9,8 +9,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const inputFilePath = path.join(__dirname, 'ngDynamic.csv');
-const outputFilePath = path.join(__dirname, 'ngDynamic_with_sql.csv');
+const inputFilePath = path.join(__dirname, 'Export_1_1.csv');
+const outputFilePath = path.join(__dirname, 'Export_1_1_with_sql.csv');
 
 const records = [];
 
@@ -24,10 +24,8 @@ const readCSV = async () => {
         try {
           const updatedObj = convertToUpdatedObj(JSON.parse(rawFilterColumn));
           const updatedSql = convertToSql(row['id'], updatedObj);
-          row['equipment_filter_updated'] = JSON.stringify(updatedObj);
           row['sql_sentence'] = updatedSql;
         } catch (error) {
-          row['equipment_filter_updated'] = '0';
           row['sql_sentence'] = '0';
         }      
         records.push(row);
@@ -42,9 +40,12 @@ const readCSV = async () => {
 };
 
 const writeCSV = async (records) => {
+  // Filtrar solo la columna sql_sentence
+  const filteredRecords = records.map(record => ({ sql_sentence: record.sql_sentence }));
+
   return new Promise((resolve, reject) => {
     const ws = createWriteStream(outputFilePath);
-    writeToStream(ws, records, { headers: true, delimiter: ';' })
+    writeToStream(ws, filteredRecords, { headers: true, delimiter: ';' })
       .on('finish', () => {
         resolve('CSV processed successfully');
       })

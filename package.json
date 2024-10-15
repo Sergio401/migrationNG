@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "csv": "node src/csvProcessor.js"
+    "csv": "node src/csvProcessor.js",
+    "csvOnlySql": "node src/csvProcessorOnlySQl.js",
+    "modifyRawFilter": "node src/rawFilterUpdated.js"
   },
   "dependencies": {
     "csv-parser": "^3.0.0",

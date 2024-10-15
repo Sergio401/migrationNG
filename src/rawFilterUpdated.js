@@ -1,7 +1,6 @@
 import { createWriteStream } from 'fs';
 import csvParser from 'csv-parser';
 import { writeToStream } from 'fast-csv';
-import { convertToUpdatedObj, convertToSql } from './helpers.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -9,8 +8,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const inputFilePath = path.join(__dirname, 'ngDynamic.csv');
-const outputFilePath = path.join(__dirname, 'ngDynamic_with_sql.csv');
+const inputFilePath = path.join(__dirname, 'SNMP_RESOURCE.csv');
+const outputFilePath = path.join(__dirname, 'SNMP_RESOURCE_updated.csv');
 
 const records = [];
 
@@ -22,13 +21,13 @@ const readCSV = async () => {
       .on('data', (row) => {
         const rawFilterColumn = row['raw_filter'];
         try {
-          const updatedObj = convertToUpdatedObj(JSON.parse(rawFilterColumn));
-          const updatedSql = convertToSql(row['id'], updatedObj);
-          row['equipment_filter_updated'] = JSON.stringify(updatedObj);
-          row['sql_sentence'] = updatedSql;
+          const updatedObj = JSON.parse(rawFilterColumn);         
+          if (updatedObj.propertiesOption) {
+            delete updatedObj.propertiesOption;
+          }
+          row['raw_filter_updated'] = JSON.stringify(updatedObj);         
         } catch (error) {
-          row['equipment_filter_updated'] = '0';
-          row['sql_sentence'] = '0';
+          row['raw_filter_updated'] = '0';
         }      
         records.push(row);
       })
