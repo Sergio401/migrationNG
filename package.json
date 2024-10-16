@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "csv": "node src/csvProcessor.js",
     "csvOnlySql": "node src/csvProcessorOnlySQl.js",
-    "modifyRawFilter": "node src/rawFilterUpdated.js"
+    "modifyRawFilter": "node src/rawFilterUpdated.js",
+    "getNameRegex": "node src/getNameRegex.js"
   },
   "dependencies": {
     "csv-parser": "^3.0.0",

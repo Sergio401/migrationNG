@@ -1,6 +1,7 @@
 import { createWriteStream } from 'fs';
 import csvParser from 'csv-parser';
 import { writeToStream } from 'fast-csv';
+import { findNameRegex, updateRawFilter } from './helpers.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -8,8 +9,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const inputFilePath = path.join(__dirname, 'SNMP_RESOURCE.csv');
-const outputFilePath = path.join(__dirname, 'SNMP_RESOURCE_updated.csv');
+const inputFilePath = path.join(__dirname, 'BR.csv');
+const outputFilePath = path.join(__dirname, 'GetNameRegex_BR.csv');
 
 const records = [];
 
@@ -19,15 +20,11 @@ const readCSV = async () => {
     readStream
       .pipe(csvParser({ separator: ';' }))
       .on('data', (row) => {
-        const rawFilterColumn = row['raw_filter'];
+        //const equipmentFilter = row['equipment_filter'];
         try {
-          const updatedObj = JSON.parse(rawFilterColumn);         
-          if (updatedObj.propertiesOption) {
-            delete updatedObj.propertiesOption;
-          }
-          row['raw_filter_updated'] = JSON.stringify(updatedObj);         
+          row['Raw_Filter'] = updateRawFilter(row);
         } catch (error) {
-          row['raw_filter_updated'] = '0';
+          row['Raw_Filter'] = '0';
         }      
         records.push(row);
       })

@@ -4,7 +4,7 @@ import { convertToUpdatedObj, convertToSql } from './helpers'
 import JsonViewer from './JsonViewer'
 
 function App() {
-  
+
   const [inputText, setInputText] = useState('')
   const [jsonOutput, setJsonOutput] = useState('')
   const [sqlOutput, setSqlOutput] = useState('')
